@@ -12,6 +12,8 @@ class PostingsController < ApplicationController
   def create
     posting_params = JSON.parse(params[:posting])
     posting = Posting.create posting_params
+    posting.photo = params[:photo]
+
     if posting.save
       render json: { status: :success, posting: posting }
     else

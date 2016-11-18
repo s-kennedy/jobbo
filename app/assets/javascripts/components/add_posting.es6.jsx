@@ -5,7 +5,7 @@ class AddPosting extends React.Component {
     this.state = {
       title: '',
       description: '',
-      photo: null,
+      photo: undefined,
       address: '',
       phone: '',
       email: '',
@@ -24,27 +24,31 @@ class AddPosting extends React.Component {
   handleSubmitForm(e) {
     e.preventDefault();
     console.log('submit!')
+    const url = '/postings';
     const form = document.querySelector('div.add-posting > form');
+
+    const formData = new FormData();
+    const request = new XMLHttpRequest();
+
     const postingData = {
         title: this.state.title,
         description: this.state.description,
-        photo: null,
         address: this.state.address,
         phone: this.state.phone,
         email: this.state.email,
         source: this.state.source, 
-    }
-    const url = '/postings';
-    const xmlhttp = new XMLHttpRequest();
+    };
+    const photo = document.querySelector('input[name="photo"]').files[0];
 
-    var request = new XMLHttpRequest();
+    formData.append('posting', JSON.stringify(postingData));
+    formData.append('photo', photo);
+
+
     request.onload = (res) => {
       console.log(request.response)
     };
-    request.open("post", "/postings");
-    var fd = new FormData();
-    fd.append('posting', JSON.stringify(postingData))
-    request.send(fd);
+    request.open("post", url);
+    request.send(formData);
   };
 
   onChangeTitle(e) {
@@ -119,7 +123,7 @@ class AddPosting extends React.Component {
           </div>
 
           <div className="input">
-            Contact:
+            Phone:
             <input 
               type="text" 
               name="phone" 
@@ -129,7 +133,7 @@ class AddPosting extends React.Component {
           </div>
 
           <div className="input">
-            Contact:
+            Email:
             <input 
               type="text" 
               name="email" 
