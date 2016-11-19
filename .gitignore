@@ -17,3 +17,9 @@
 .byebug_history
 
 .DS_Store
+
+# ignore npm packages
+/node_modules
+
+# ignore assets uploaded with paperclip
+/public/system

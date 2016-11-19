@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
-  root to: 'postings#search'
+  root to: 'postings#home'
+  get '/search', to: 'postings#search', as: 'search'
   resources :postings
 end

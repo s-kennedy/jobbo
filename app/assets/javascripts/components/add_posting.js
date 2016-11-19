@@ -2,7 +2,8 @@ class AddPosting extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
+
+    this.emptyForm = {
       title: '',
       description: '',
       photo: undefined,
@@ -10,7 +11,10 @@ class AddPosting extends React.Component {
       phone: '',
       email: '',
       source: '',
-    };
+      lat: undefined,
+      lon: undefined
+    }
+    this.state = this.emptyForm;
 
     this.handleSubmitForm = this.handleSubmitForm.bind(this);
     this.onChangeTitle = this.onChangeTitle.bind(this);
@@ -19,6 +23,53 @@ class AddPosting extends React.Component {
     this.onChangePhone = this.onChangePhone.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangeSource = this.onChangeSource.bind(this);
+    this.getAddressFromLocation = this.getAddressFromLocation.bind(this);
+    this.getLocation = this.getLocation.bind(this);
+  }
+
+  getLocation(e) {
+    e.preventDefault();
+    if (!navigator.geolocation) {
+      alert("Geolocation is not available on your device. Please provide the address.")
+    }
+
+    const options = {
+      enableHighAccuracy: true,
+      maximumAge: 30000,
+      timeout: 60000
+    };
+ 
+    const _geolocationSuccess = (position) => {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      this.setState({lat: lat, lon: lon});
+    };
+
+    const _geolocationError = (error) => {
+      return false
+    };
+
+    const result = navigator.geolocation.getCurrentPosition(_geolocationSuccess, _geolocationError, options);
+  };
+
+
+  _geolocationError(error) {
+    return false
+  };
+
+  getAddressFromLocation(e) {
+    const address = e.target.value;
+    const geocoder = new google.maps.Geocoder();
+
+    geocoder.geocode( { 'address' : address}, (response, status) => {
+      if (status == google.maps.GeocoderStatus.OK) {
+        const lat = response[0].geometry.location.lat();
+        const lon = response[0].geometry.location.lng();
+        this.setState({lat: lat, lon: lon});
+      } else {
+        console.log('could not geocode address');
+      }
+    });
   }
 
   handleSubmitForm(e) {
@@ -37,6 +88,8 @@ class AddPosting extends React.Component {
         phone: this.state.phone,
         email: this.state.email,
         source: this.state.source, 
+        latitude: this.state.lat,
+        longitude: this.state.lon,
     };
     const photo = document.querySelector('input[name="photo"]').files[0];
 
@@ -45,7 +98,7 @@ class AddPosting extends React.Component {
 
 
     request.onload = (res) => {
-      console.log(request.response)
+      this.setState(this.emptyForm);
     };
     request.open("post", url);
     request.send(formData);
@@ -62,8 +115,8 @@ class AddPosting extends React.Component {
   };
 
   onChangeAddress(e) {
-    const value = e.target.value;
-    this.setState({address: value});
+    const address = e.target.value;
+    this.setState({address: address});
   };
 
   onChangePhone(e) {
@@ -85,7 +138,7 @@ class AddPosting extends React.Component {
     return(
       <div className="add-posting">
         <form onSubmit={this.handleSubmitForm}>
-          <div className="input">
+          <div className="input title">
             Title:
             <input 
               type="text" 
@@ -95,7 +148,7 @@ class AddPosting extends React.Component {
             />
           </div>
 
-          <div className="input">
+          <div className="input description">
             Description:
             <textarea 
               name="description" 
@@ -104,7 +157,7 @@ class AddPosting extends React.Component {
             />
           </div>
 
-          <div className="input">
+          <div className="input photo">
             Photo:
             <input 
               type="file" 
@@ -112,17 +165,21 @@ class AddPosting extends React.Component {
             />
           </div>
 
-          <div className="input">
+          <div className="input location">
             Address:
             <input 
               type="text" 
               name="address" 
               onChange={this.onChangeAddress}
+              onBlur={this.getAddressFromLocation}
               value={this.state.address}
             />
+            <button className="get-location" onClick={this.getLocation}>
+              Get my location
+            </button>
           </div>
 
-          <div className="input">
+          <div className="input phone">
             Phone:
             <input 
               type="text" 
@@ -132,7 +189,7 @@ class AddPosting extends React.Component {
             />
           </div>
 
-          <div className="input">
+          <div className="input email">
             Email:
             <input 
               type="text" 
@@ -142,7 +199,7 @@ class AddPosting extends React.Component {
             />
           </div>
 
-          <div className="input">
+          <div className="input source">
             Source:
             <input 
               type="text" 
@@ -161,3 +218,4 @@ class AddPosting extends React.Component {
   };
 }
 
+module.exports = AddPosting;

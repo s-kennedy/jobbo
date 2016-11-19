@@ -1,8 +1,17 @@
 class PostingsController < ApplicationController
   # respond_to :json
 
+  def home
+    postings = Posting.all
+    render component: 'SearchPostings', props: { postings: postings }
+  end
+
   def search
-    render component: 'SearchPostings'
+    search_params = JSON.parse params[:search]
+    north_lat = search_params['northLat']
+    south_lat = search_params['southLat']
+    east_lon = search_params['eastLon']
+    west_lon = search_params['westLon']
   end
 
   def new
