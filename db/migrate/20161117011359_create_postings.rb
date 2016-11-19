@@ -3,8 +3,8 @@ class CreatePostings < ActiveRecord::Migration[5.0]
     create_table :postings do |t|
       t.string :title
       t.text :description
-      t.float :latitute, :index
-      t.float :longitute, :index
+      t.float :latitude, index: true
+      t.float :longitude, index: true
       t.string :address
       t.string :phone
       t.string :email

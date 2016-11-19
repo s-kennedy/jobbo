@@ -7,11 +7,12 @@ class PostingsController < ApplicationController
   end
 
   def search
-    search_params = JSON.parse params[:search]
-    north_lat = search_params['northLat']
-    south_lat = search_params['southLat']
-    east_lon = search_params['eastLon']
-    west_lon = search_params['westLon']
+    north_lat = params['northLat'].to_f
+    south_lat = params['southLat'].to_f
+    east_lon = params['eastLon'].to_f
+    west_lon = params['westLon'].to_f
+    results = Posting.where('latitude < ? AND latitude > ? AND longitude > ? AND longitude < ?', north_lat, south_lat, west_lon, east_lon)
+    render json: { status: :success, results: results }
   end
 
   def new

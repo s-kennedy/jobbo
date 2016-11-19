@@ -1,4 +1,4 @@
 require( 'babel-polyfill' );
 
-global.SearchPostings = require( 'components/seach_postings' ).default;
-global.AddPosting = require( 'components/add_posting' ).default;
+window.SearchPostings = global.SearchPostings = require("./components/search_postings.js").default
+window.AddPosting = global.AddPosting = require("./components/add_posting.js").default

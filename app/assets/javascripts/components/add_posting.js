@@ -1,4 +1,4 @@
-class AddPosting extends React.Component {
+export default class AddPosting extends React.Component {
 
   constructor(props) {
     super(props);
@@ -217,5 +217,3 @@ class AddPosting extends React.Component {
     );
   };
 }
-
-module.exports = AddPosting;

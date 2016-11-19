@@ -1,4 +1,6 @@
-class SearchPostings extends React.Component {
+import axios from 'axios';
+
+export default class SearchPostings extends React.Component {
 
   constructor(props) {
     super(props);
@@ -16,6 +18,7 @@ class SearchPostings extends React.Component {
     this.getLocation = this.getLocation.bind(this);
     this.repositionMap = this.repositionMap.bind(this);
     this.getJobPostings = this.getJobPostings.bind(this);
+    this.showJobMarkers = this.showJobMarkers.bind(this);
   };
 
   componentDidMount() {
@@ -38,6 +41,7 @@ class SearchPostings extends React.Component {
   }
 
   getLocation() {
+    console.log("getLocation")
     return new Promise((resolve, reject) => {
       if (!navigator.geolocation) {
         alert("Geolocation is not available on your device. Please provide the address.")
@@ -67,6 +71,7 @@ class SearchPostings extends React.Component {
   }
 
   getJobPostings() {
+    console.log("getJobPostings")
     return new Promise((resolve, reject) => {
       const mapBounds = this.state.mapBounds
       const searchParams = {
@@ -78,24 +83,42 @@ class SearchPostings extends React.Component {
 
       const url = '/search';
 
-      fetch(url, {
-        method: "POST",
-        body: form
-      });
-
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(searchParams)
-      }).then((response) => {
-        console.log(response.json());
+      axios.get(url, {
+        params: searchParams
       })
+      .then((response) => {
+        if (response.status == 200) {
+          this.state.postings = response.data.results;
+          this.showJobMarkers();
+        }; 
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     });
   };
 
+  showJobMarkers() {
+    console.log("showJobMarkers")
+    const postings = this.state.postings;
+
+    postings.forEach((posting) => {
+      const position = new google.maps.LatLng(posting.latitude, posting.longitude);
+      const marker = new google.maps.Marker({
+        position: position,
+        map: this.map,
+        title: posting.title
+      });
+
+      marker.addListener('click', () => {
+        console.log(marker.title);
+      });
+    });
+  };
+
+
   repositionMap() {
+    console.log("repositionMap")
     return new Promise((resolve, reject) => {
       const newPosition = new google.maps.LatLng(this.state.lat, this.state.lon)
       this.map.setCenter(newPosition);
@@ -112,7 +135,7 @@ class SearchPostings extends React.Component {
     this.getLocation()
       .then(this.repositionMap)
       .then(this.getJobPostings)
-      // .then(this.renderMarkers)
+      .then(this.showJobMarkers)
   }
 
   render () {
@@ -130,4 +153,3 @@ class SearchPostings extends React.Component {
   };
 }
 
-module.exports = SearchPostings;
