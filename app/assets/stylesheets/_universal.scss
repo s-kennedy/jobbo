@@ -1,0 +1,83 @@
+@import '_variables';
+
+
+body {
+  font-family: $primary-font;
+  font-size: $body-text-size;
+  margin: 0;
+}
+
+h1 {
+  font-size: $title-size;
+  color: $primary-colour;
+}
+
+h2 {
+  font-size: $subtitle-size;
+  color: $secondary-colour;
+}
+
+p {
+  font-size: $body-text-size;
+  colour: $black;
+}
+
+input[type='text'] {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid black;
+  width: 40vw;
+  min-width: 200px;
+  font-size: $body-text-size;
+}
+
+input[type='text']:focus {
+  outline: none;
+}
+
+::-webkit-input-placeholder {
+  font-style: oblique;
+  font-size: $body-text-size;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+  font-style: oblique; 
+  font-size: $body-text-size; 
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+  font-style: oblique;  
+  font-size: $body-text-size;
+}
+
+:-ms-input-placeholder {  
+  font-style: oblique;  
+  font-size: $body-text-size;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a:hover {
+  color: $primary-colour;
+}
+
+a:active, a:focus, a:visited {
+  color: $secondary-colour;
+}
+
+i {
+  color: $primary-colour;
+  width: 20px;
+  padding-right: 10px;
+}
+
+input[type='submit'].btn {
+  background-color: $secondary-colour;
+  color: $white;
+  border: none;
+  font-size: $body-text-size;
+  padding: 6px 12px;
+}

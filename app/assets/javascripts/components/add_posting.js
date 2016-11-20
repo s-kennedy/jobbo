@@ -1,3 +1,7 @@
+import TextInputWithLabel from './text_input_with_label.js'
+import TextAreaWithLabel from './text_area_with_label.js'
+import FileInputWithLabel from './file_input_with_label.js'
+
 export default class AddPosting extends React.Component {
 
   constructor(props) {
@@ -137,80 +141,68 @@ export default class AddPosting extends React.Component {
   render () {
     return(
       <div className="add-posting">
+        <h1>Post a Job</h1>
         <form onSubmit={this.handleSubmitForm}>
-          <div className="input title">
-            Title:
-            <input 
-              type="text" 
-              name="title" 
-              onChange={this.onChangeTitle} 
-              value={this.state.title}
-            />
-          </div>
+          <TextInputWithLabel
+            classes='title'
+            name='title'
+            labelText='Job title'
+            onChange={this.onChangeTitle}
+            value={this.state.title}
+          />
 
-          <div className="input description">
-            Description:
-            <textarea 
-              name="description" 
-              onChange={this.onChangeDescription}
-              value={this.state.description}
-            />
-          </div>
+          <TextAreaWithLabel
+            classes='description'
+            name='description'
+            labelText='Description'
+            onChange={this.onChangeDescription}
+            value={this.state.description}
+          />
 
-          <div className="input photo">
-            Photo:
-            <input 
-              type="file" 
-              name="photo"
-            />
-          </div>
+          <FileInputWithLabel
+            classes='photo'
+            labelText='Photo'
+            name='photo'
+          />
 
-          <div className="input location">
-            Address:
-            <input 
-              type="text" 
-              name="address" 
-              onChange={this.onChangeAddress}
-              onBlur={this.getAddressFromLocation}
-              value={this.state.address}
-            />
-            <button className="get-location" onClick={this.getLocation}>
+          <TextInputWithLabel
+            classes='address'
+            name='address'
+            labelText='Address'
+            onChange={this.onChangeAddress}
+            value={this.state.address}
+            onBlur={this.getAddressFromLocation}
+          />
+          <a className="get-location" onClick={this.getLocation}>
               Get my location
-            </button>
-          </div>
+          </a>
 
-          <div className="input phone">
-            Phone:
-            <input 
-              type="text" 
-              name="phone" 
-              onChange={this.onChangePhone}
-              value={this.state.phone}
-            />
-          </div>
+          <TextInputWithLabel
+            classes='phone'
+            name='phone'
+            labelText='Phone number'
+            onChange={this.onChangePhone}
+            value={this.state.phone}
+          />
 
-          <div className="input email">
-            Email:
-            <input 
-              type="text" 
-              name="email" 
-              onChange={this.onChangeEmail}
-              value={this.state.email}
-            />
-          </div>
+          <TextInputWithLabel
+            classes='email'
+            name='email'
+            labelText='Email address'
+            onChange={this.onChangeEmail}
+            value={this.state.email}
+          />
 
-          <div className="input source">
-            Source:
-            <input 
-              type="text" 
-              name="source" 
-              onChange={this.onChangeSource}
-              value={this.state.source}
-            />
-          </div>
+          <TextInputWithLabel
+            classes='source'
+            name='source'
+            labelText='How do you know about this job?'
+            onChange={this.onChangeSource}
+            value={this.state.source}
+          />
 
-          <div className="btn-submit">
-            <input type="submit" value="Submit" />
+          <div className='submit-btn'>
+            <input className='btn' type="submit" value="Submit" />
           </div>
         </form>
       </div>

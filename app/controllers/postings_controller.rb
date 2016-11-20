@@ -23,6 +23,7 @@ class PostingsController < ApplicationController
     posting_params = JSON.parse(params[:posting])
     posting = Posting.create posting_params
     posting.photo = params[:photo]
+    posting.image_src = posting.photo.url
 
     if posting.save
       render json: { status: :success, posting: posting }
