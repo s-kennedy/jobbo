@@ -1,6 +1,7 @@
 import TextInputWithLabel from './text_input_with_label.js'
 import TextAreaWithLabel from './text_area_with_label.js'
 import FileInputWithLabel from './file_input_with_label.js'
+import DatePickerWithLabel from './date_picker_with_label.js'
 
 export default class AddPosting extends React.Component {
 
@@ -16,8 +17,13 @@ export default class AddPosting extends React.Component {
       email: '',
       source: '',
       lat: undefined,
-      lon: undefined
+      lon: undefined,
+      date_to_remove: '',
+      employer: '',
+      salary: '',
+      schedule: '',
     }
+
     this.state = this.emptyForm;
 
     this.handleSubmitForm = this.handleSubmitForm.bind(this);
@@ -27,6 +33,10 @@ export default class AddPosting extends React.Component {
     this.onChangePhone = this.onChangePhone.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangeSource = this.onChangeSource.bind(this);
+    this.onChangeEmployer = this.onChangeEmployer.bind(this);
+    this.onChangeSalary = this.onChangeSalary.bind(this);
+    this.onChangeSchedule = this.onChangeSchedule.bind(this);
+    this.onChangeAdvertisedUntil = this.onChangeAdvertisedUntil.bind(this);
     this.getAddressFromLocation = this.getAddressFromLocation.bind(this);
     this.getLocation = this.getLocation.bind(this);
   }
@@ -94,6 +104,8 @@ export default class AddPosting extends React.Component {
         source: this.state.source, 
         latitude: this.state.lat,
         longitude: this.state.lon,
+        employer: this.state.employer,
+        date_to_remove: this.state.date_to_remove,
     };
     const photo = document.querySelector('input[name="photo"]').files[0];
 
@@ -138,18 +150,67 @@ export default class AddPosting extends React.Component {
     this.setState({source: value});
   };
 
+  onChangeAdvertisedUntil(e) {
+    const value = e.target.value;
+    this.setState({date_to_remove: value});
+  };
+
+  onChangeEmployer(e) {
+    const value = e.target.value;
+    this.setState({employer: value});
+  };
+
+  onChangeSalary(e) {
+    const value = e.target.value;
+    this.setState({salary: value});
+  };
+
+  onChangeSchedule(e) {
+    const value = e.target.value;
+    this.setState({schedule: value});
+  };
+
   render () {
     return(
       <div className="add-posting">
         <h1>Post a Job</h1>
         <form onSubmit={this.handleSubmitForm}>
-          <TextInputWithLabel
-            classes='title'
-            name='title'
-            labelText='Job title'
-            onChange={this.onChangeTitle}
-            value={this.state.title}
-          />
+
+        <h2>About the job</h2>
+          <div className="about flex-row"> 
+            <TextInputWithLabel
+              classes='title'
+              name='title'
+              labelText='Job title'
+              onChange={this.onChangeTitle}
+              value={this.state.title}
+            />
+
+            <TextInputWithLabel
+              classes='employer'
+              name='employer'
+              labelText='Job employer'
+              onChange={this.onChangeEmployer}
+              value={this.state.employer}
+            />
+
+            <TextInputWithLabel
+              classes='salary'
+              name='salary'
+              labelText='Salary'
+              onChange={this.onChangeSalary}
+              value={this.state.salary}
+            />
+
+            <TextInputWithLabel
+              classes='schedule'
+              name='schedule'
+              labelText='Schedule'
+              onChange={this.onChangeSchedule}
+              value={this.state.schedule}
+            />
+          </div>
+
 
           <TextAreaWithLabel
             classes='description'
@@ -165,41 +226,62 @@ export default class AddPosting extends React.Component {
             name='photo'
           />
 
-          <TextInputWithLabel
-            classes='address'
-            name='address'
-            labelText='Address'
-            onChange={this.onChangeAddress}
-            value={this.state.address}
-            onBlur={this.getAddressFromLocation}
-          />
-          <a className="get-location" onClick={this.getLocation}>
-              Get my location
-          </a>
+          <h2>Job location</h2>
+          <div className="location flex-row">
+            <TextInputWithLabel
+              classes='address'
+              name='address'
+              labelText='Address'
+              onChange={this.onChangeAddress}
+              value={this.state.address}
+              onBlur={this.getAddressFromLocation}
+            />
+            <div className="form-field" >
+              <a className="get-location" onClick={this.getLocation}>
+                <i className="fa fa-location-arrow" aria-hidden="true"></i>
+                Use my current location
+              </a>
+            </div>
+          </div>
 
-          <TextInputWithLabel
-            classes='phone'
-            name='phone'
-            labelText='Phone number'
-            onChange={this.onChangePhone}
-            value={this.state.phone}
-          />
+          <h2>Contact info</h2>
+          <div className="contact flex-row">
+            <TextInputWithLabel
+              classes='phone'
+              name='phone'
+              labelText='Phone number'
+              onChange={this.onChangePhone}
+              value={this.state.phone}
+            />
 
-          <TextInputWithLabel
-            classes='email'
-            name='email'
-            labelText='Email address'
-            onChange={this.onChangeEmail}
-            value={this.state.email}
-          />
+            <TextInputWithLabel
+              classes='email'
+              name='email'
+              labelText='Email address'
+              onChange={this.onChangeEmail}
+              value={this.state.email}
+            />
+          </div>
 
-          <TextInputWithLabel
-            classes='source'
-            name='source'
-            labelText='How do you know about this job?'
-            onChange={this.onChangeSource}
-            value={this.state.source}
-          />
+          <h2>More info</h2>
+
+          <div className="contact flex-row">
+            <DatePickerWithLabel
+              classes='advertised-until'
+              name='advertised-until'
+              labelText='Advertised until'
+              onChange={this.onChangeAdvertisedUntil}
+              value={this.state.date_to_remove}
+            />
+
+            <TextInputWithLabel
+              classes='source'
+              name='source'
+              labelText='How do you know about this job?'
+              onChange={this.onChangeSource}
+              value={this.state.source}
+            />
+          </div>
 
           <div className='submit-btn'>
             <input className='btn' type="submit" value="Submit" />

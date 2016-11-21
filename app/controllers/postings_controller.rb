@@ -2,8 +2,8 @@ class PostingsController < ApplicationController
   # respond_to :json
 
   def home
-    postings = Posting.all
-    render component: 'SearchPostings', props: { postings: postings }
+    @postings = Posting.all
+    # render component: 'SearchPostings', props: { postings: postings }
   end
 
   def search
@@ -16,7 +16,6 @@ class PostingsController < ApplicationController
   end
 
   def new
-    render component: 'AddPosting'
   end
 
   def create

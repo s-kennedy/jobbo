@@ -10,6 +10,9 @@ gem 'jbuilder', '~> 2.5'
 gem "paperclip", "~> 5.0.0"
 gem "browserify-rails"
 gem "react-rails"
+gem "nokogiri"
+gem "figaro"
+gem "httparty"
 
 group :development, :test do
   gem 'pry-rails'
