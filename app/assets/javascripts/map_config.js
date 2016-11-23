@@ -181,7 +181,7 @@ const MapOptions = {
   zoomControl: true,
   zoomControlOptions: {
     style: google.maps.ZoomControlStyle.SMALL,
-    position: google.maps.ControlPosition.RIGHT_BOTTOM
+    position: google.maps.ControlPosition.TOP_LEFT
   },
   styles: MapStyles,
 };

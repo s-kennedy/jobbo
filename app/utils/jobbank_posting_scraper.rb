@@ -125,17 +125,15 @@ module Utils
     end
 
     def get_address_from_employer
-      api_key = 'AIzaSyDF-94AiQS-bFXDHgzX-gSGRBzhmESfv3k'
-      url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=#{@employer}&key=#{api_key}"
+      url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=#{@employer}&key=#{ENV['google_places_api_key']}"
       response = HTTParty.get(url)
 
       response['results'][0]['formatted_address'] if response['results'] && response['results'][0]
     end
 
     def get_location
-      api_key = 'AIzaSyDJnK_gTZG1H5ElT_ka1vOZ4JJbkMZCEKQ'
       address_uri_encoded = URI.escape(@address)
-      url = "https://maps.googleapis.com/maps/api/geocode/json?address=#{address_uri_encoded}&key=#{api_key}"
+      url = "https://maps.googleapis.com/maps/api/geocode/json?address=#{address_uri_encoded}&key=#{ENV['google_geocoder_api_key']}"
       response = HTTParty.get(url)
       if response['results'] && response['results'][0]
         location = response['results'][0]['geometry']['location']

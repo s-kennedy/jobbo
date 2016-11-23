@@ -130,4 +130,11 @@ div.add-posting {
   }
 }
 
+section.show-posting {
+  div.job-detail span.detail-title {
+    font-weight: bold;
+    color: $primary-colour;
+    text-transform: capitalize;
+  }
+}
 

@@ -3,7 +3,7 @@ require_relative '../../app/utils/jobbank_posting_scraper.rb'
 desc "Get job postings from http://www.jobbank.gc.ca/"
 task :scrape_jobbank => :environment do
   CITY_CODE_TORONTO = 22437 # Toronto
-  PAGES = 2 # go up to 101
+  PAGES = 101 # go up to 101
   JOB_BANK_ROOT_URL = "http://www.jobbank.gc.ca/"
 
   job_posting_urls = []

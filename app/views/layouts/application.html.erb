@@ -3,7 +3,7 @@
   <head>
     <title>Jobhunt</title>
     <%= csrf_meta_tags %>
-    <%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=AIzaSyD3GmLfAShw5ZT337DZ91WeLc6p4eT5TLQ" %>
+    <%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{ENV['google_maps_api_key']}" %>
     <%= javascript_include_tag "https://use.fontawesome.com/ab5e247e92.js" %>
 
     <%= stylesheet_link_tag    'application', media: 'all' %>

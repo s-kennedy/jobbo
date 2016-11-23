@@ -227,6 +227,7 @@ export default class AddPosting extends React.Component {
           />
 
           <h2>Job location</h2>
+          <small className="help-text">Provide either the address of the employer or your current location if you're at the job site.</small>
           <div className="location flex-row">
             <TextInputWithLabel
               classes='address'
