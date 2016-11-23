@@ -26,7 +26,8 @@
     "babelify": "^7.2.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "webpack:deploy": "webpack --config=webpack/webpack.config.js -p",
+    "heroku-postbuild": "npm run webpack:deploy"
   },
   "author": "Sharon Kennedy",
   "license": "MIT"

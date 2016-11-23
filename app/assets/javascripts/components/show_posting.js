@@ -1,5 +1,6 @@
 import axios from 'axios';
 import ParagraphWithLabel from './paragraph_with_label.js'
+import LinkWithLabel from './link_with_label.js'
 
 export default class ShowPosting extends React.Component {
 
@@ -18,11 +19,10 @@ export default class ShowPosting extends React.Component {
 
   renderJobDetails() {
     const allDetails = ['employer', 'description', 'salary', 'schedule', 'address', 
-  'phone', 'email', 'source', 'date_posted']
+  'phone', 'email', 'date_posted']
 
     return allDetails.map((detail) => {
       const detailText = this.props.posting[detail]
-      console.log(detail, detailText);
       if (detailText != null && detailText.length > 0) {
         return (
           <ParagraphWithLabel
@@ -50,6 +50,13 @@ export default class ShowPosting extends React.Component {
           <img src={imageSrc} />
 
           {detailsToShow}
+
+          <LinkWithLabel 
+            key='source'
+            detailLabel='source'
+            url={this.props.posting.source} 
+            anchorText={this.props.posting.source} 
+          />
 
         </div>
       </section>
