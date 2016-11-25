@@ -1,33 +1,34 @@
 import axios from 'axios';
 import ShowPosting from './show_posting.js';
-import { MapStyles, MapOptions } from '../map_config.js';
+import Map from './map.js';
+import SearchFields from './search_fields.js';
+import { MapOptions, initialPosition } from '../map_config.js';
 
 export default class SearchPostings extends React.Component {
 
   constructor(props) {
     super(props);
-    const initialLat = 43.6452817;
-    const initialLon = -79.3843036;
     this.state = {
       postings: this.props.postings,
       filteredPositngs: undefined,
-      lat: initialLat,
-      lon: initialLon,
+      lat: initialPosition.lat,
+      lon: initialPosition.lon,
       mapBounds: undefined,
       searchQuery: '',
       selectedPosting: this.props.postings[0],
     };
+
     this.map = undefined;
-    this.visibleMarkers = [];
+    this.mapMarkers = [];
 
     this.searchJobsByLocation = this.searchJobsByLocation.bind(this);
     this.getLocation = this.getLocation.bind(this);
     this.repositionMap = this.repositionMap.bind(this);
     this.getJobPostings = this.getJobPostings.bind(this);
-    this.showJobMarkers = this.showJobMarkers.bind(this);
+    this.renderMapMarkers = this.renderMapMarkers.bind(this);
     this.onChangeSearchQuery = this.onChangeSearchQuery.bind(this);
     this.filterJobsBySearchQuery = this.filterJobsBySearchQuery.bind(this);
-    this.removeVisibleMarkers = this.removeVisibleMarkers.bind(this);
+    // this.removeMapMarkers = this.removeMapMarkers.bind(this);
   };
 
   componentDidMount() {
@@ -39,14 +40,18 @@ export default class SearchPostings extends React.Component {
     this.map.setOptions({ center: new google.maps.LatLng(this.state.lat, this.state.lon),})
     
     google.maps.event.addListener(this.map, 'dragend', () => { 
-      this.redrawMapAndMarkers();
+      this.showJobMarkers();
     });
+
+    google.maps.event.addListener(this.map, 'zoom_changed', () => { 
+      this.showJobMarkers();
+    });
+    
+    this.showJobMarkers();
   }
 
-  redrawMapAndMarkers() {
-    const newBounds = this.map.getBounds();
-    this.setState({mapBounds: newBounds});
-    this.getJobPostings().then(this.showJobMarkers); 
+  showJobMarkers() {
+    this.getMapBounds().then(this.getJobPostings).then(this.renderMapMarkers); 
   }
 
   getLocation() {
@@ -66,8 +71,6 @@ export default class SearchPostings extends React.Component {
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
         this.setState({lat: lat, lon: lon});
-        console.log(lat)
-        console.log(lon)
         resolve();
       };
 
@@ -77,6 +80,14 @@ export default class SearchPostings extends React.Component {
 
       navigator.geolocation.getCurrentPosition(_geolocationSuccess, _geolocationError, options);
     });
+  }
+
+  getMapBounds() {
+    return new Promise((resolve, reject) => {
+      const newBounds = this.map.getBounds();
+      this.setState({mapBounds: newBounds});
+      resolve();
+    })
   }
 
   getJobPostings() {
@@ -97,8 +108,9 @@ export default class SearchPostings extends React.Component {
       })
       .then((response) => {
         if (response.status == 200) {
-          this.state.postings = response.data.results;
-          this.showJobMarkers();
+          this.setState({postings: response.data.results})
+          this.setState({filteredPostings: response.data.results})
+          this.renderMapMarkers();
         }; 
       })
       .catch(function (error) {
@@ -107,9 +119,9 @@ export default class SearchPostings extends React.Component {
     });
   };
 
-  showJobMarkers() {
-    console.log("showJobMarkers")
-    this.visibleMarkers = [];
+  renderMapMarkers() {
+    console.log("renderMapMarkers")
+    this.mapMarkers = [];
     const postings = this.state.filteredPostings || this.state.postings;
     const infoWindow = new google.maps.InfoWindow();
 
@@ -134,7 +146,7 @@ export default class SearchPostings extends React.Component {
         infoWindow.open(this.map, marker);
       })
 
-      this.visibleMarkers.push(marker);
+      this.mapMarkers.push(marker);
     });
   };
 
@@ -157,13 +169,13 @@ export default class SearchPostings extends React.Component {
     this.getLocation()
       .then(this.repositionMap)
       .then(this.getJobPostings)
-      .then(this.showJobMarkers)
+      .then(this.renderMapMarkers)
   };
 
   onChangeSearchQuery(e) {
     const value = e.target.value;
     this.setState({searchQuery: value});
-    this.filterJobsBySearchQuery(value).then(this.showJobMarkers)
+    this.filterJobsBySearchQuery(value).then(this.renderMapMarkers)
   };
 
   filterJobsBySearchQuery(query) {
@@ -186,7 +198,7 @@ export default class SearchPostings extends React.Component {
   };
 
   removeVisibleMarkers() {
-    this.visibleMarkers.forEach((marker) => {
+    this.mapMarkers.forEach((marker) => {
       marker.setMap(null);
     });
   }
@@ -195,36 +207,13 @@ export default class SearchPostings extends React.Component {
     return(
       <div className='search'>
         <div className='btn-add-posting btn'>
-          <a href="/postings/new">
-            <i className="fa fa-plus" aria-hidden="true"></i>
-            Post a job
-          </a>
         </div>
-        <div className='search-map' id='search-map' style={{height: '100vh', width: '100vw'}}/>
-        <section className='search-postings menu'>
-          <div className="title">
-            <h2>Search job postings</h2>
-          </div>
-          <div className="filters">
-            <div className="filter">
-              <a className='search-location' onClick={this.searchJobsByLocation}>
-                <i className="fa fa-location-arrow" aria-hidden="true"></i>Search near me
-              </a>
-            </div>
-
-            <div className="filter">
-              <i className="fa fa-search" aria-hidden="true"></i>Search text
-              <input 
-                className="seach-query"
-                type="text" 
-                name="search-query" 
-                onChange={this.onChangeSearchQuery}
-                value={this.state.searchQuery}
-                placeholder="bartender part-time"
-              />
-            </div>
-          </div>
-        </section>
+        <Map />
+        <SearchFields 
+          onLocationSearch={this.searchJobsByLocation} 
+          onChangeSearchQuery={this.onChangeSearchQuery}
+          searchQuery={this.state.searchQuery}
+        />
         <ShowPosting posting={this.state.selectedPosting} />
       </div>
     )

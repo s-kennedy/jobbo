@@ -23,3 +23,5 @@
 
 # ignore assets uploaded with paperclip
 /public/system
+# Ignore application configuration
+/config/application.yml

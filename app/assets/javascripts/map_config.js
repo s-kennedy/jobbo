@@ -186,4 +186,9 @@ const MapOptions = {
   styles: MapStyles,
 };
 
-module.exports = { MapOptions };
+const initialPosition = {
+    lat: 43.6452817,
+    lon: -79.3843036,
+};
+
+module.exports = { MapOptions, initialPosition };
