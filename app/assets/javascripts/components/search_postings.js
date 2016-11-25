@@ -67,8 +67,7 @@ export default class SearchPostings extends React.Component {
     .then((response) => {
       if (response.status == 200) {
         this.setState({postings: response.data.results})
-        this.setState({filteredPostings: response.data.results})
-        console.log("got new postings!!")
+        this.filterJobsBySearchQuery(this.state.searchQuery)
       }; 
     })
     .catch(function (error) {
@@ -84,7 +83,6 @@ export default class SearchPostings extends React.Component {
 
   filterJobsBySearchQuery(query) {
     if (query == '') {
-      console.log("empty string")
       this.setState({filteredPostings: this.state.postings})
     } else {
       const regex = new RegExp(query, 'i')
