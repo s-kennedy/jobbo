@@ -12,9 +12,15 @@ export default class Map extends React.Component {
     this.renderMapMarkers();
   }
 
-  componentWillReceiveProps() {
-    console.log("receiving props!")
-    this.renderMapMarkers();
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.lat !== this.props.lat || nextProps.lon !== this.props.lon) {
+      this.repositionMap();
+    }
+
+    // find a better way to detect difference
+    if (nextProps.filteredPostings.length !== this.props.filteredPostings.length) {
+      this.renderMapMarkers()
+    }
   }
 
   renderMap() {
@@ -32,20 +38,7 @@ export default class Map extends React.Component {
     });
   }
 
-  showJobMarkers() {
-    this.getMapBounds().then(this.getJobPostings).then(this.renderMapMarkers); 
-  }
-
-  getMapBounds() {
-    return new Promise((resolve, reject) => {
-      const newBounds = this.map.getBounds();
-      this.setState({mapBounds: newBounds});
-      resolve();
-    })
-  }
-
   renderMapMarkers() {
-    console.log("rendering more markers!")
     this.removeVisibleMarkers()
     const postings = this.props.filteredPostings;
     const infoWindow = new google.maps.InfoWindow();
@@ -76,17 +69,12 @@ export default class Map extends React.Component {
 
 
   repositionMap() {
-    console.log("repositionMap")
-    return new Promise((resolve, reject) => {
-      const newPosition = new google.maps.LatLng(this.state.lat, this.state.lon)
-      this.map.setCenter(newPosition);
-      this.map.setZoom(14);
+    const newPosition = new google.maps.LatLng(this.props.lat, this.props.lon)
+    this.map.setCenter(newPosition);
+    this.map.setZoom(15);
 
-      const newBounds = this.map.getBounds();
-      this.setState({mapBounds: newBounds});
-
-      resolve();
-    });
+    const newBounds = this.map.getBounds();
+    this.props.onMove(newBounds);
   };
 
   removeVisibleMarkers() {
