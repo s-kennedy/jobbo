@@ -7,12 +7,7 @@ export default class ShowPosting extends React.Component {
   constructor(props) {
     super(props);
   };
-
-  componentWillUpdate() {
-    console.log("UPDATING POSTING")
-    console.log(this.props.posting)
-  }
-
+  
   closePostingSection() {
     document.getElementById('show-posting').style.visibility = 'collapse';
   }
