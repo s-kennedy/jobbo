@@ -5,40 +5,6 @@
 @import '_universal';
 @import '_variables';
 
-section.menu.search-postings {
-  background-color: $white;
-  border: 4px solid $secondary-colour;
-  display: flex;
-  flex-direction: column;
-
-  div.title {
-    background-color: $primary-colour;
-    width: 60vw;
-    align-self: center;
-    justify-content: center;
-    text-align: center;
-    transform: translateY(-28px);
-
-    h2 {
-      color: $white;
-      margin: 0;
-      font-size: 34px;
-      line-height: 1.5
-    }
-  }
-
-  div.filters {
-    padding: 0 20px;
-
-    div.filter {
-      padding: 8px 0;
-    }
-
-    input[type='text'] {
-      margin-left: 12px;
-    }
-  }
-}
 
 section.menu.add-postings {
   background-color: $secondary-colour;
@@ -46,13 +12,11 @@ section.menu.add-postings {
 }
 
 div.search {
-  display: flex;
-  justify-content: center;
   
   section.show-posting {
     display: flex;
     align-self: center;
-    position: absolute;
+    position: fixed;
     background-color: $white;
     border: 6px solid $primary-colour;
     width: 90vw;
@@ -134,9 +98,58 @@ div.actions {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  position: absolute;
   width: 100%;
   bottom: 0;
-  height: 25vh;
+
+  div.actions-column {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    flex-basis: 50%;
+    min-width: 400px;
+
+    section.menu {
+      margin: 10px;
+
+      div.section-title {
+        background-color: $primary-colour;
+        margin: 0 auto;
+        text-align: center;
+
+        h2 {
+          color: $white;
+          margin: 0;
+          font-size: 34px;
+          line-height: 1.5
+        }
+      }
+
+      div.menu-container {
+      
+        border: 4px solid $primary-colour;
+        background-color: $white;
+        padding: 10px;
+
+        div.search-actions {
+          display: flex;
+          flex-direction: column;
+        }
+
+
+        div.filters {
+          padding: 0 20px;
+
+          div.filter {
+            padding: 8px 0;
+            display: flex;
+          }
+
+          input[type='text'] {
+            margin-left: 12px;
+          }
+        }
+      }
+    }
+  }
 }
 

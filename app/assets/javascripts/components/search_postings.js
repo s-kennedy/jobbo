@@ -118,12 +118,21 @@ export default class SearchPostings extends React.Component {
           onMarkerClick={this.onMarkerClick}
         />
         <div className="actions">
-          <SearchFields 
-            onLocationSearch={this.getLocation} 
-            onChangeSearchQuery={this.onChangeSearchQuery}
-            searchQuery={this.state.searchQuery}
-          />
-          <AddPostingPartOne />
+          <div className="actions-column">
+            <SearchFields 
+              onLocationSearch={this.getLocation} 
+              onChangeSearchQuery={this.onChangeSearchQuery}
+              searchQuery={this.state.searchQuery}
+            />
+            <SearchFields 
+              onLocationSearch={this.getLocation} 
+              onChangeSearchQuery={this.onChangeSearchQuery}
+              searchQuery={this.state.searchQuery}
+            />
+          </div>
+          <div className="actions-column">
+            <AddPostingPartOne />
+          </div>
         </div>
         <ShowPosting posting={this.state.selectedPosting} />
       </div>

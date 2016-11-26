@@ -26,8 +26,8 @@ input[type='text'] {
   background-color: transparent;
   border: none;
   border-bottom: 1px solid black;
-  width: 40vw;
-  min-width: 200px;
+  flex-grow: 1;
+  min-width: 180px;
   font-size: $body-text-size;
 }
 

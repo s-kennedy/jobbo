@@ -122,60 +122,64 @@ export default class AddPostingPartOne extends React.Component {
 
   render () {
     return(
-      <div className="add-posting">
-        <h1>Post a Job</h1>
-        <form onSubmit={this.handleSubmitForm}>
+      <section className="add-posting-part-one menu">
+        <div className="section-title">
+          <h2>Post a Job</h2>
+        </div>
+        <div className="menu-container">
+          <form onSubmit={this.handleSubmitForm}>
 
-          <FileInputWithLabel
-            classes='photo'
-            labelText='Photo'
-            name='photo'
-          />
-
-        <h2>About the job</h2>
-          <div className="about flex-row"> 
-            <TextInputWithLabel
-              classes='title'
-              name='title'
-              labelText='Job title'
-              onChange={this.onChangeTitle}
-              value={this.state.title}
+            <FileInputWithLabel
+              classes='photo'
+              labelText='Photo'
+              name='photo'
             />
 
-            <TextInputWithLabel
-              classes='employer'
-              name='employer'
-              labelText='Job employer'
-              onChange={this.onChangeEmployer}
-              value={this.state.employer}
-            />
+          <h2>About the job</h2>
+            <div className="about flex-row"> 
+              <TextInputWithLabel
+                classes='title'
+                name='title'
+                labelText='Job title'
+                onChange={this.onChangeTitle}
+                value={this.state.title}
+              />
 
-          </div>
+              <TextInputWithLabel
+                classes='employer'
+                name='employer'
+                labelText='Job employer'
+                onChange={this.onChangeEmployer}
+                value={this.state.employer}
+              />
 
-          <h2>Job location</h2>
-          <small className="help-text">Provide either the address of the employer or your current location if you're at the job site.</small>
-          <div className="location flex-row">
-            <TextInputWithLabel
-              classes='address'
-              name='address'
-              labelText='Address'
-              onChange={this.onChangeAddress}
-              value={this.state.address}
-              onBlur={this.getAddressFromLocation}
-            />
-            <div className="form-field" >
-              <a className="get-location" onClick={this.getLocation}>
-                <i className="fa fa-location-arrow" aria-hidden="true"></i>
-                Use my current location
-              </a>
             </div>
-          </div>
 
-          <div className='submit-btn'>
-            <input className='btn' type="submit" value="Submit" />
-          </div>
-        </form>
-      </div>
+            <h2>Job location</h2>
+            <small className="help-text">Provide either the address of the employer or your current location if you're at the job site.</small>
+            <div className="location flex-row">
+              <TextInputWithLabel
+                classes='address'
+                name='address'
+                labelText='Address'
+                onChange={this.onChangeAddress}
+                value={this.state.address}
+                onBlur={this.getAddressFromLocation}
+              />
+              <div className="form-field" >
+                <a className="get-location" onClick={this.getLocation}>
+                  <i className="fa fa-location-arrow" aria-hidden="true"></i>
+                  Use my current location
+                </a>
+              </div>
+            </div>
+
+            <div className='submit-btn'>
+              <input className='btn' type="submit" value="Submit" />
+            </div>
+          </form>
+        </div>
+      </section>
     );
   };
 };
