@@ -12,6 +12,9 @@ class PostingsController < ApplicationController
     east_lon = params['eastLon'].to_f
     west_lon = params['westLon'].to_f
     results = Posting.where('latitude < ? AND latitude > ? AND longitude > ? AND longitude < ?', north_lat, south_lat, west_lon, east_lon)
+    if params['scope'] == 'volunteer'
+      results = results.where(scope: 'volunteer');
+    end
     render json: { status: :success, results: results }
   end
 

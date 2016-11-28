@@ -1,10 +1,13 @@
 export default class SearchFields extends React.Component {
 
   render() {
+    const scope = this.props.scope;
+    const title = scope === "jobs" ? "Job postings" : "Volunteer opportunities"
+    const placeholderText = scope === "jobs" ? "part-time" : "civic tech"
     return (
-      <section className='search-postings menu'>
+      <section className={`search-postings menu ${scope}`}>
         <div className="section-title">
-          <h2>Search job postings</h2>
+          <h2>{title}</h2>
         </div>
         <div className="menu-container">
           <div className="filters">
@@ -22,7 +25,7 @@ export default class SearchFields extends React.Component {
                 name="search-query" 
                 onChange={this.props.onChangeSearchQuery}
                 value={this.props.searchQuery}
-                placeholder="bartender part-time"
+                placeholder={placeholderText}
               />
             </div>
           </div>

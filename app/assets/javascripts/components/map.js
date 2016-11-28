@@ -45,7 +45,9 @@ export default class Map extends React.Component {
 
     postings.forEach((posting) => {
       const position = new google.maps.LatLng(posting.latitude, posting.longitude);
-      const marker = new google.maps.Marker({
+      const markerColor = posting.scope === "jobs" ? 'FF7566' : 'FFDF00'
+      const marker = new StyledMarker({
+        styleIcon: new StyledIcon(StyledIconTypes.MARKER, {color: markerColor}),
         position: position,
         map: this.map,
         title: posting.title

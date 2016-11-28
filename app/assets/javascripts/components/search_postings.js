@@ -17,6 +17,7 @@ export default class SearchPostings extends React.Component {
       mapBounds: undefined,
       searchQuery: '',
       selectedPosting: this.props.postings[0],
+      scope: 'jobs',
     };
 
     this.getLocation = this.getLocation.bind(this);
@@ -58,6 +59,7 @@ export default class SearchPostings extends React.Component {
       eastLon: mapBounds.getNorthEast().lng(),
       southLat: mapBounds.getSouthWest().lat(),
       westLon: mapBounds.getSouthWest().lng(),
+      scope: this.state.scope,
     };
 
     const url = '/search';
@@ -119,11 +121,13 @@ export default class SearchPostings extends React.Component {
         <div className="actions">
           <div className="actions-column">
             <SearchFields 
+              scope="jobs"
               onLocationSearch={this.getLocation} 
               onChangeSearchQuery={this.onChangeSearchQuery}
               searchQuery={this.state.searchQuery}
             />
             <SearchFields 
+              scope="volunteer"
               onLocationSearch={this.getLocation} 
               onChangeSearchQuery={this.onChangeSearchQuery}
               searchQuery={this.state.searchQuery}

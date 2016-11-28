@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161121011621) do
+ActiveRecord::Schema.define(version: 20161128040736) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,8 +24,8 @@ ActiveRecord::Schema.define(version: 20161121011621) do
     t.string   "phone"
     t.string   "email"
     t.string   "source"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.string   "photo_file_name"
     t.string   "photo_content_type"
     t.integer  "photo_file_size"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20161121011621) do
     t.datetime "date_to_remove"
     t.datetime "date_posted"
     t.string   "jobbank_id"
+    t.string   "scope",              default: "jobs"
     t.index ["latitude"], name: "index_postings_on_latitude", using: :btree
     t.index ["longitude"], name: "index_postings_on_longitude", using: :btree
   end
