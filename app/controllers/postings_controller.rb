@@ -20,12 +20,17 @@ class PostingsController < ApplicationController
 
   def create
     posting_params = JSON.parse(params[:posting])
-    posting = Posting.create posting_params
-    posting.photo = params[:photo]
-    posting.image_src = posting.photo.url
+    posting = Posting.create posting_params.except(:submit_type)
+
+    if params[:photo].present?
+      posting.photo = params[:photo]
+      posting.image_src = posting.photo.url
+    end
+
+    redirect_url = params[:submit_type] == 'submit-btn' ? root_url : new_posting_path
 
     if posting.save
-      render json: { status: :success, posting: posting }
+      render json: { status: :success, posting: posting, redirect_url: redirect_url }
     else
       render json: { status: :unprocessable_entity, errors: posting.errors.full_messages }
     end

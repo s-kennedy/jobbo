@@ -8,6 +8,8 @@ export default class FileInputWithLabel extends React.Component {
         <input 
           type="file" 
           name={this.props.name}
+          accept="image/*" 
+          capture="camera"
         />
       </div>
     );

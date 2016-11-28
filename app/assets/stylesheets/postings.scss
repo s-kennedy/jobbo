@@ -15,23 +15,39 @@ div.search {
   
   section.show-posting {
     display: flex;
-    align-self: center;
     position: fixed;
-    background-color: $white;
-    border: 6px solid $primary-colour;
-    width: 90vw;
-    height: 90vh;
-    z-index: 2;
+    z-index: 3;
+    height: 100%;
+    width: 100%;
 
-    div.posting-container {
-      padding: 30px;
+    div.posting-background {
+      height: 100%;
       width: 100%;
-
-      a.close-posting {
-        float: right;
+      background-color: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    div.posting-container {
+      padding: 20px;
+      align-self: center;
+      background-color: $white;
+      border: 6px solid $primary-colour;
+      width: 80vw;
+      height: 80vh;
+      z-index: 2;
+        a.close-posting {
+          float: right;
+        }
+        a {
+          overflow-wrap: break-word;
+        }
+        h1 {
+          color: $secondary-colour;
+        }
       }
     }
-  }
 
   div.btn-add-posting {
     background-color: $secondary-colour;
@@ -86,6 +102,47 @@ div.add-posting {
   }
 }
 
+section.add-posting-part-one {
+
+  div.flex-row {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+
+    div.form-field {
+      flex-grow: 1;
+      flex-direction: row;
+      flex-basis: 40%;
+      padding: 10px;
+  
+      textarea, input {
+        width: 100%;
+      }
+
+      textarea {
+        height: 10vh;
+      }
+    }
+  }
+
+  div.flex-row.buttons {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    div.submit-btn, div.add-more-btn {
+      justify-content: center;
+      margin-left: 12px;
+    }
+
+    div.submit-btn input.btn {
+      background-color: $grey;
+    }
+  }
+
+}
+
 section.show-posting {
   div.job-detail span.detail-title {
     font-weight: bold;
@@ -128,7 +185,7 @@ div.actions {
       
         border: 4px solid $primary-colour;
         background-color: $white;
-        padding: 10px;
+        padding: 20px;
 
         div.search-actions {
           display: flex;
@@ -137,7 +194,7 @@ div.actions {
 
 
         div.filters {
-          padding: 0 20px;
+          padding: 0 10px;
 
           div.filter {
             padding: 8px 0;

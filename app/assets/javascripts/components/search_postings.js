@@ -108,8 +108,7 @@ export default class SearchPostings extends React.Component {
   render () {
     return(
       <div className='search'>
-        <div className='btn-add-posting btn'>
-        </div>
+        <ShowPosting posting={this.state.selectedPosting} />
         <Map 
           filteredPostings={this.state.filteredPostings}
           lat={this.state.lat}
@@ -134,7 +133,6 @@ export default class SearchPostings extends React.Component {
             <AddPostingPartOne />
           </div>
         </div>
-        <ShowPosting posting={this.state.selectedPosting} />
       </div>
     )
   };

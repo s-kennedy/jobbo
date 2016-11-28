@@ -1,5 +1,6 @@
 import TextInputWithLabel from './text_input_with_label.js'
 import FileInputWithLabel from './file_input_with_label.js'
+import axios from 'axios';
 
 export default class AddPostingPartOne extends React.Component {
 
@@ -21,7 +22,7 @@ export default class AddPostingPartOne extends React.Component {
     this.onChangeTitle = this.onChangeTitle.bind(this);
     this.onChangeAddress = this.onChangeAddress.bind(this);
     this.onChangeEmployer = this.onChangeEmployer.bind(this);
-    this.getAddressFromLocation = this.getAddressFromLocation.bind(this);
+    this.getLocationFromAddress = this.getLocationFromAddress.bind(this);
     this.getLocation = this.getLocation.bind(this);
   }
 
@@ -55,7 +56,7 @@ export default class AddPostingPartOne extends React.Component {
     return false
   };
 
-  getAddressFromLocation(e) {
+  getLocationFromAddress(e) {
     const address = e.target.value;
     const geocoder = new google.maps.Geocoder();
 
@@ -73,6 +74,7 @@ export default class AddPostingPartOne extends React.Component {
   handleSubmitForm(e) {
     e.preventDefault();
     console.log('submit!')
+    const submitType = e.target.parentElement.classList[0]
     const url = '/postings';
     const form = document.querySelector('div.add-posting > form');
 
@@ -81,27 +83,38 @@ export default class AddPostingPartOne extends React.Component {
 
     const postingData = {
         title: this.state.title,
-        description: this.state.description,
         address: this.state.address,
-        phone: this.state.phone,
-        email: this.state.email,
-        source: this.state.source, 
         latitude: this.state.lat,
         longitude: this.state.lon,
         employer: this.state.employer,
-        date_to_remove: this.state.date_to_remove,
     };
     const photo = document.querySelector('input[name="photo"]').files[0];
+    if (photo !== undefined) {
+      formData.append('photo', photo);
+    }
 
     formData.append('posting', JSON.stringify(postingData));
-    formData.append('photo', photo);
+    formData.append('submit_type', submitType);
 
-
-    request.onload = (res) => {
-      this.setState(this.emptyForm);
-    };
-    request.open("post", url);
-    request.send(formData);
+    axios.post(url, formData)
+    .then((response) => {
+      if (response.status == 200) {
+        this.setState(this.emptyForm);
+        const baseUrl = response.data.redirect_url;
+        const title = response.data.posting.title;
+        const employer = response.data.posting.title;
+        const address = response.data.posting.address;
+        const latitude = response.data.posting.latitude;
+        const longitude = response.data.posting.longitude;
+        const redirectUrl = `${baseUrl}?title=${title}&employer=${employer}&address=${address}&latitude=${latitude}&longitude=${longitude}`;
+        window.location.href = redirectUrl;
+      } else {
+        alert("We were unable to save your job posting, please try again!");
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   };
 
   onChangeTitle(e) {
@@ -127,15 +140,16 @@ export default class AddPostingPartOne extends React.Component {
           <h2>Post a Job</h2>
         </div>
         <div className="menu-container">
-          <form onSubmit={this.handleSubmitForm}>
+          <form >
 
-            <FileInputWithLabel
-              classes='photo'
-              labelText='Photo'
-              name='photo'
-            />
+            <div className="about flex-row"> 
+              <FileInputWithLabel
+                classes='photo'
+                labelText='Photo'
+                name='photo'
+              />
+            </div>
 
-          <h2>About the job</h2>
             <div className="about flex-row"> 
               <TextInputWithLabel
                 classes='title'
@@ -155,16 +169,15 @@ export default class AddPostingPartOne extends React.Component {
 
             </div>
 
-            <h2>Job location</h2>
-            <small className="help-text">Provide either the address of the employer or your current location if you're at the job site.</small>
             <div className="location flex-row">
+              <small className="help-text">Provide either the address of the employer or your current location if you're at the job site.</small>
               <TextInputWithLabel
                 classes='address'
                 name='address'
                 labelText='Address'
                 onChange={this.onChangeAddress}
                 value={this.state.address}
-                onBlur={this.getAddressFromLocation}
+                onBlur={this.getLocationFromAddress}
               />
               <div className="form-field" >
                 <a className="get-location" onClick={this.getLocation}>
@@ -174,8 +187,13 @@ export default class AddPostingPartOne extends React.Component {
               </div>
             </div>
 
-            <div className='submit-btn'>
-              <input className='btn' type="submit" value="Submit" />
+            <div className="flex-row buttons">
+              <div className='submit-btn'>
+                <input className='btn' type="submit" value="Submit now" onClick={this.handleSubmitForm}/>
+              </div>
+              <div className='add-more-btn'>
+                <input className='btn' type="submit" value="Add job details" onClick={this.handleSubmitForm}/>
+              </div>
             </div>
           </form>
         </div>
