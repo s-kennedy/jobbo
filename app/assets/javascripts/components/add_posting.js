@@ -41,6 +41,22 @@ export default class AddPosting extends React.Component {
     this.getLocation = this.getLocation.bind(this);
   }
 
+  componentWillMount() {
+    const params = window.location.href.split('?')[1];
+    const prefilledValues = {};
+    if (params) {
+      const attrs = ['title', 'employer', 'address', 'latitude', 'longitude'];
+      attrs.forEach((attr) => {
+        const paramsCopy = params;
+        let value = paramsCopy.split(`${attr}=`)
+        value = value.length > 1 ? value[1].split('&')[0] : '';
+        const unencodedValue = decodeURI(value);
+        prefilledValues[attr] = unencodedValue;
+      });
+    this.setState(prefilledValues);
+    }
+  }
+
   getLocation(e) {
     e.preventDefault();
     if (!navigator.geolocation) {
@@ -108,13 +124,15 @@ export default class AddPosting extends React.Component {
         date_to_remove: this.state.date_to_remove,
     };
     const photo = document.querySelector('input[name="photo"]').files[0];
+    if (photo !== undefined) {
+      formData.append('photo', photo);
+    }
 
     formData.append('posting', JSON.stringify(postingData));
-    formData.append('photo', photo);
-
 
     request.onload = (res) => {
       this.setState(this.emptyForm);
+      window.location.href = '/';
     };
     request.open("post", url);
     request.send(formData);

@@ -36,23 +36,25 @@ export default class ShowPosting extends React.Component {
 
     return(
       <section className="show-posting" id="show-posting" style={{visibility: 'collapse'}}>
-        <div className="posting-container">
-          <a className="close-posting" onClick={this.closePostingSection}>
-            <i className="fa fa-times" aria-hidden="true"></i>
-          </a>
-          <h1>{this.props.posting.title}</h1>
+        <div className='posting-background'>
+          <div className="posting-container">
+            <a className="close-posting" onClick={this.closePostingSection}>
+              <i className="fa fa-times" aria-hidden="true"></i>
+            </a>
+            <h1>{this.props.posting.title}</h1>
 
-          <img src={imageSrc} />
+            <img src={imageSrc} />
 
-          {detailsToShow}
+            {detailsToShow}
 
-          <LinkWithLabel 
-            key='source'
-            detailLabel='source'
-            url={this.props.posting.source} 
-            anchorText={this.props.posting.source} 
-          />
+            <LinkWithLabel 
+              key='source'
+              detailLabel='source'
+              url={this.props.posting.source} 
+              anchorText={this.props.posting.source} 
+            />
 
+          </div>
         </div>
       </section>
     );

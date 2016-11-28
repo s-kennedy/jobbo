@@ -26,8 +26,8 @@ input[type='text'] {
   background-color: transparent;
   border: none;
   border-bottom: 1px solid black;
-  width: 40vw;
-  min-width: 200px;
+  flex-grow: 1;
+  min-width: 180px;
   font-size: $body-text-size;
 }
 
@@ -69,15 +69,25 @@ a:active, a:focus, a:visited {
 }
 
 i {
-  color: $primary-colour;
+  color: $secondary-colour;
   width: 20px;
   padding-right: 10px;
 }
 
-input[type='submit'].btn {
+input.btn {
   background-color: $secondary-colour;
   color: $white;
   border: none;
   font-size: $body-text-size;
   padding: 6px 12px;
+}
+
+.help-text {
+  padding: 10px;
+  color: $grey;
+}
+
+#search-map {
+  height: 80vh;
+  width: 100vw;
 }

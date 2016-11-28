@@ -3,6 +3,7 @@ import ShowPosting from './show_posting.js';
 import Map from './map.js';
 import SearchFields from './search_fields.js';
 import { initialPosition } from '../map_config.js';
+import AddPostingPartOne from './add_posting_part_one.js'
 
 export default class SearchPostings extends React.Component {
 
@@ -107,12 +108,7 @@ export default class SearchPostings extends React.Component {
   render () {
     return(
       <div className='search'>
-        <div className='btn-add-posting btn'>
-          <a href="/postings/new">
-            <i className="fa fa-plus" aria-hidden="true"></i>
-            Post a job
-          </a>
-        </div>
+        <ShowPosting posting={this.state.selectedPosting} />
         <Map 
           filteredPostings={this.state.filteredPostings}
           lat={this.state.lat}
@@ -120,12 +116,23 @@ export default class SearchPostings extends React.Component {
           onMove={this.onMapMove}
           onMarkerClick={this.onMarkerClick}
         />
-        <SearchFields 
-          onLocationSearch={this.getLocation} 
-          onChangeSearchQuery={this.onChangeSearchQuery}
-          searchQuery={this.state.searchQuery}
-        />
-        <ShowPosting posting={this.state.selectedPosting} />
+        <div className="actions">
+          <div className="actions-column">
+            <SearchFields 
+              onLocationSearch={this.getLocation} 
+              onChangeSearchQuery={this.onChangeSearchQuery}
+              searchQuery={this.state.searchQuery}
+            />
+            <SearchFields 
+              onLocationSearch={this.getLocation} 
+              onChangeSearchQuery={this.onChangeSearchQuery}
+              searchQuery={this.state.searchQuery}
+            />
+          </div>
+          <div className="actions-column">
+            <AddPostingPartOne />
+          </div>
+        </div>
       </div>
     )
   };
