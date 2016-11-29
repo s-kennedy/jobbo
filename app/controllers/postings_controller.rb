@@ -23,7 +23,14 @@ class PostingsController < ApplicationController
 
   def create
     posting_params = JSON.parse(params[:posting])
-    posting = Posting.create posting_params.except(:submit_type)
+
+    if posting_params['address'].present? && posting_params['lat'].blank?
+      lat, lon = get_location(posting_params['address'])
+      posting_params[:latitude] = lat
+      posting_params[:longitude] = lon
+    end
+    
+    posting = Posting.create posting_params
 
     if params[:photo].present?
       posting.photo = params[:photo]
@@ -36,6 +43,19 @@ class PostingsController < ApplicationController
       render json: { status: :success, posting: posting, redirect_url: redirect_url }
     else
       render json: { status: :unprocessable_entity, errors: posting.errors.full_messages }
+    end
+  end
+
+
+  private
+
+  def get_location(address)
+    address_uri_encoded = URI.escape(address)
+    url = "https://maps.googleapis.com/maps/api/geocode/json?address=#{address_uri_encoded}&key=#{ENV['google_geocoder_api_key']}"
+    response = HTTParty.get(url)
+    if response['results'] && response['results'][0]
+      location = response['results'][0]['geometry']['location']
+      return location['lat'].to_f, location['lng'].to_f
     end
   end
 end

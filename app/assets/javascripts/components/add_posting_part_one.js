@@ -98,6 +98,7 @@ export default class AddPostingPartOne extends React.Component {
     formData.append('posting', JSON.stringify(postingData));
     formData.append('submit_type', submitType);
 
+    debugger;
     axios.post(url, formData)
     .then((response) => {
       if (response.status == 200) {
@@ -139,7 +140,6 @@ export default class AddPostingPartOne extends React.Component {
     const volunteer = document.getElementById('posting-volunteer-checkbox').checked;
     const scope = volunteer ? 'volunteer' : 'jobs';
     this.setState({scope: scope});
-    debugger;
   }
 
   render () {

@@ -97,11 +97,14 @@ export default class SearchPostings extends React.Component {
     if (query == '') {
       this.setState({filteredPostings: this.state.postings})
     } else {
-      const regex = new RegExp(query, 'i')
-      const postings = this.state.postings;
-      const matches = postings.filter((posting) => {
-        return regex.test(posting.title) || regex.test(posting.description)
-      })
+      let matches = this.state.postings;
+      const words = query.split(' ')
+      words.forEach((word) => {
+        const regex = new RegExp(word, 'i')
+        matches = matches.filter((posting) => {
+          return regex.test(posting.title) || regex.test(posting.description)
+        });
+      });
       this.setState({filteredPostings: matches});
     }
   };
