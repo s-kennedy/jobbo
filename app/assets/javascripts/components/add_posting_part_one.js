@@ -1,5 +1,6 @@
 import TextInputWithLabel from './text_input_with_label.js'
 import FileInputWithLabel from './file_input_with_label.js'
+import CheckboxWithLabel from './checkbox_with_label.js'
 import axios from 'axios';
 
 export default class AddPostingPartOne extends React.Component {
@@ -22,6 +23,7 @@ export default class AddPostingPartOne extends React.Component {
     this.onChangeTitle = this.onChangeTitle.bind(this);
     this.onChangeAddress = this.onChangeAddress.bind(this);
     this.onChangeEmployer = this.onChangeEmployer.bind(this);
+    this.onChangeVolunteerCheckbox = this.onChangeVolunteerCheckbox.bind(this);
     this.getLocationFromAddress = this.getLocationFromAddress.bind(this);
     this.getLocation = this.getLocation.bind(this);
   }
@@ -73,7 +75,6 @@ export default class AddPostingPartOne extends React.Component {
 
   handleSubmitForm(e) {
     e.preventDefault();
-    console.log('submit!')
     const submitType = e.target.parentElement.classList[0]
     const url = '/postings';
     const form = document.querySelector('div.add-posting > form');
@@ -87,6 +88,7 @@ export default class AddPostingPartOne extends React.Component {
         latitude: this.state.lat,
         longitude: this.state.lon,
         employer: this.state.employer,
+        scope: this.state.scope,
     };
     const photo = document.querySelector('input[name="photo"]').files[0];
     if (photo !== undefined) {
@@ -133,11 +135,18 @@ export default class AddPostingPartOne extends React.Component {
     this.setState({employer: value});
   };
 
+  onChangeVolunteerCheckbox() {
+    const volunteer = document.getElementById('posting-volunteer-checkbox').checked;
+    const scope = volunteer ? 'volunteer' : 'jobs';
+    this.setState({scope: scope});
+    debugger;
+  }
+
   render () {
     return(
       <section className="add-posting-part-one menu">
         <div className="section-title">
-          <h2>Post a Job</h2>
+          <h2>Add a posting</h2>
         </div>
         <div className="menu-container">
           <form >
@@ -165,6 +174,12 @@ export default class AddPostingPartOne extends React.Component {
                 labelText='Job employer'
                 onChange={this.onChangeEmployer}
                 value={this.state.employer}
+              />
+
+              <CheckboxWithLabel
+                label="Volunteer position" 
+                id="posting-volunteer-checkbox"
+                onChange={this.onChangeVolunteerCheckbox}
               />
 
             </div>

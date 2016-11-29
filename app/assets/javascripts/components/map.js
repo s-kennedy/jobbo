@@ -12,13 +12,13 @@ export default class Map extends React.Component {
     this.renderMapMarkers();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.lat !== this.props.lat || nextProps.lon !== this.props.lon) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.lat !== this.props.lat || prevProps.lon !== this.props.lon) {
       this.repositionMap();
     }
 
     // find a better way to detect difference
-    if (nextProps.filteredPostings.length !== this.props.filteredPostings.length) {
+    if (prevProps.filteredPostings.length !== this.props.filteredPostings.length) {
       this.renderMapMarkers()
     }
   }
@@ -26,20 +26,22 @@ export default class Map extends React.Component {
   renderMap() {
     this.map = new google.maps.Map(document.getElementById('search-map'), MapOptions);
     this.map.setOptions({ center: new google.maps.LatLng(this.props.lat, this.props.lon),})
+
+    google.maps.event.addListener(this.map, 'tilesloaded', () => {
+      this.props.onMapLoad(this.map.getBounds());
+    })
     
     google.maps.event.addListener(this.map, 'dragend', () => { 
-      const newBounds = this.map.getBounds()
-      this.props.onMove(newBounds);
+      this.props.onMove(this.map.getBounds());
     });
 
     google.maps.event.addListener(this.map, 'zoom_changed', () => { 
-      const newBounds = this.map.getBounds()
-      this.props.onMove(newBounds);
+      this.props.onMove(this.map.getBounds());
     });
   }
 
   renderMapMarkers() {
-    this.removeVisibleMarkers()
+    this.removeVisibleMarkers();
     const postings = this.props.filteredPostings;
     const infoWindow = new google.maps.InfoWindow();
 
@@ -50,7 +52,7 @@ export default class Map extends React.Component {
         styleIcon: new StyledIcon(StyledIconTypes.MARKER, {color: markerColor}),
         position: position,
         map: this.map,
-        title: posting.title
+        title: posting.title,
       });
 
       marker.metadata = { postingId: posting.id }
@@ -60,7 +62,7 @@ export default class Map extends React.Component {
       });
 
       marker.addListener('mouseover', () => {
-        const title = posting.title;
+        const title = posting.scope === "jobs" ? posting.title : `[Volunteer] ${posting.title}`;
         infoWindow.setContent(title);
         infoWindow.open(this.map, marker);
       })

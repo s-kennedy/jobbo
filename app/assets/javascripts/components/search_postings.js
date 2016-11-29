@@ -25,8 +25,16 @@ export default class SearchPostings extends React.Component {
     this.onChangeSearchQuery = this.onChangeSearchQuery.bind(this);
     this.filterJobsBySearchQuery = this.filterJobsBySearchQuery.bind(this);
     this.onMapMove = this.onMapMove.bind(this);
+    this.onMapLoad = this.onMapLoad.bind(this);
     this.onMarkerClick = this.onMarkerClick.bind(this);
+    this.filterVolunteerOpps = this.filterVolunteerOpps.bind(this);
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.mapBounds !== this.state.mapBounds || prevState.scope !== this.state.scope) {
+      this.getJobPostings();
+    }
+  }
 
   getLocation() {
     if (!navigator.geolocation) {
@@ -54,6 +62,7 @@ export default class SearchPostings extends React.Component {
 
   getJobPostings() {
     const mapBounds = this.state.mapBounds;
+
     const searchParams = {
       northLat: mapBounds.getNorthEast().lat(),
       eastLon: mapBounds.getNorthEast().lng(),
@@ -99,12 +108,21 @@ export default class SearchPostings extends React.Component {
 
   onMapMove(newBounds) {
     this.setState({mapBounds: newBounds});
-    this.getJobPostings();
   }
 
   onMarkerClick(posting) {
     this.setState({selectedPosting: posting})
     document.getElementById('show-posting').style.visibility = 'visible'
+  }
+
+  onMapLoad(newBounds) {
+    this.setState({mapBounds: newBounds});
+  }
+
+  filterVolunteerOpps() {
+    const volunteerOnly = document.getElementById('volunteer-checkbox').checked;
+    const scope = volunteerOnly ? 'volunteer' : 'jobs';
+    this.setState({scope: scope});
   }
 
   render () {
@@ -117,6 +135,7 @@ export default class SearchPostings extends React.Component {
           lon={this.state.lon}
           onMove={this.onMapMove}
           onMarkerClick={this.onMarkerClick}
+          onMapLoad={this.onMapLoad}
         />
         <div className="actions">
           <div className="actions-column">
@@ -124,13 +143,12 @@ export default class SearchPostings extends React.Component {
               scope="jobs"
               onLocationSearch={this.getLocation} 
               onChangeSearchQuery={this.onChangeSearchQuery}
-              searchQuery={this.state.searchQuery}
             />
             <SearchFields 
               scope="volunteer"
+              onCheckVolunteerOption={this.filterVolunteerOpps}
               onLocationSearch={this.getLocation} 
               onChangeSearchQuery={this.onChangeSearchQuery}
-              searchQuery={this.state.searchQuery}
             />
           </div>
           <div className="actions-column">

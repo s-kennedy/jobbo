@@ -33,6 +33,7 @@ export default class ShowPosting extends React.Component {
   render() {
     const imageSrc = this.props.posting.image_src || '';
     const detailsToShow = this.renderJobDetails();
+    const title = this.props.posting.scope === 'jobs' ? this.props.posting.title : `[Volunteer] ${this.props.posting.title}`;
 
     return(
       <section className="show-posting" id="show-posting" style={{visibility: 'collapse'}}>
@@ -41,7 +42,7 @@ export default class ShowPosting extends React.Component {
             <a className="close-posting" onClick={this.closePostingSection}>
               <i className="fa fa-times" aria-hidden="true"></i>
             </a>
-            <h1>{this.props.posting.title}</h1>
+            <h1>{title}</h1>
 
             <img src={imageSrc} />
 

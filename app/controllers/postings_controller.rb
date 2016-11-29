@@ -2,7 +2,7 @@ class PostingsController < ApplicationController
   # respond_to :json
 
   def home
-    @postings = Posting.order(date_posted: :desc).limit(500)
+    @postings = Posting.order(date_posted: :desc).limit(50)
     # render component: 'SearchPostings', props: { postings: postings }
   end
 
