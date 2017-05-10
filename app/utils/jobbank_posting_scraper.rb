@@ -22,7 +22,7 @@ module Utils
     end
 
     def jobbank_id(page_url)
-      id = page_url.split('&id=')[1].split('&')[0]
+      id = page_url.split('jobposting/')[1]
       @job_data[:jobbank_id] = id
       id
     end
@@ -53,7 +53,7 @@ module Utils
       node = @page.css('div.job-posting-details p.date-business span.business')
       if node.present? && node.text.include?('Employer Details')
         text = node.text.split('Employer Details')[1]
-      else 
+      else
         text = node.text
       end
       employer = text.strip if text.present?
@@ -62,8 +62,8 @@ module Utils
 
     def get_date_posted
       date_string = @page.css('div.job-posting-details p.date-business span.date')
-      date_posted = date_string.text.strip.split('Posted on ')[1] if date_string.present?
-      @job_data[:date_posted] = DateTime.parse(date_posted)
+      date_posted = DateTime.parse(date_string.text) if date_string.present?
+      @job_data[:date_posted] = date_posted
     end
 
     def get_salary
